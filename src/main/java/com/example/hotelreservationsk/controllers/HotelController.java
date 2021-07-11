@@ -1,9 +1,11 @@
 package com.example.hotelreservationsk.controllers;
 
+import com.example.hotelreservationsk.controllers.entities.Confirmation;
 import com.example.hotelreservationsk.controllers.entities.Hotel;
 import com.example.hotelreservationsk.controllers.entities.Hotelslist;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.hotelreservationsk.controllers.entities.reservation;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -16,10 +18,9 @@ public class HotelController {
 
     public static List<Hotel> CSVReader() {
         List<Hotel> hotelList = new ArrayList<>();
-        String path = "C:/Users/sivak/IdeaProjects/Hotel Reservation SK/src/main/resources/static/Hotel.csv";
         String line = "";
         try {
-            BufferedReader br = new BufferedReader(new FileReader(path));
+            BufferedReader br = new BufferedReader(new FileReader(new ClassPathResource("static/Hotel.csv").getFile()));
             boolean header = true;
             while ((line = br.readLine()) != null) {
                 if (header) {
@@ -43,11 +44,16 @@ public class HotelController {
         return hotelList;
     }
 
-    @RequestMapping("/siva")
-    public Hotelslist nammaFunction() {
+    @RequestMapping("/listHotels")
+    public Hotelslist SKHotelFunction() {
         Hotelslist hotelList = new Hotelslist();
         hotelList.setHotels_list(CSVReader());
         return hotelList;
+    }
+
+    @RequestMapping(value = "/reservationConfirmation", method = RequestMethod.POST, consumes = "application/json")
+    public Confirmation SKHotelFunctionno2(@RequestBody reservation reserve) {
+        return new Confirmation();
     }
 }
 
